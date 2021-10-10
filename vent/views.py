@@ -17,6 +17,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django import forms
 from django.contrib.auth.decorators import login_required,permission_required
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from vent.api import *
 
 @login_required(login_url='/login/')
@@ -34,15 +35,73 @@ def deuda_list(request):
 @login_required(login_url='/login/')
 def deuda_new(request):
     template = 'deuda_form.html'
+    fecha_actual = timezone.now().date()
 
     if request.method == "POST":
 
-        docId  = request.POST.get("docId")
+        idDeuda  = request.POST.get("docId")
+        label  = request.POST.get("label")
+        value  = request.POST.get("value")
+        start  = request.POST.get("start")
+        end  = request.POST.get("end")
+        start_time  = request.POST.get("start-time")
+        end_time  = request.POST.get("end-time")
+        f1 = str(start) +"T"+str(start_time) +":00"
+        f2 = str(end) +"T"+str(end_time) +":00"
+        #print(docId)
+        print(label)
+        print(value)
+        print(f1)
+        print(f2)
+        api_deuda_new(idDeuda,f1,f2,value,label)
 
         return redirect('vent:deuda_list')
 
 
     context={
         'obj':None,
+        'fecha_actual':fecha_actual,
+    }
+    return render(request,template,context)
+
+@login_required(login_url='/login/')
+def deuda_edit(request,idDoc):
+    template = 'deuda_form.html'
+    fecha_actual = timezone.now().date()
+    obj = dict()
+    print("-------------------------------------------------")
+    docId,label,payUrl,value,start,end = api_deuda(idDoc)
+    print("-------------------------------------------------")
+
+    if request.method == "POST":
+
+        idDeuda  = request.POST.get("docId")
+        label  = request.POST.get("label")
+        value  = request.POST.get("value")
+        start  = request.POST.get("start")
+        end  = request.POST.get("end")
+        start_time  = request.POST.get("start-time")
+        end_time  = request.POST.get("end-time")
+        f1 = str(start) +"T"+str(start_time) +":00"
+        f2 = str(end) +"T"+str(end_time) +":00"
+        #print(docId)
+        print(label)
+        print(value)
+        print(f1)
+        print(f2)
+        api_deuda_new(idDeuda,f1,f2,value,label)
+
+        return redirect('vent:deuda_list')
+
+
+    context={
+        'obj':docId,
+        'docId':docId,
+        'label':label,
+        'payUrl':payUrl+"/qr",
+        'value':value,
+        'start':start,
+        'end':end,
+        'fecha_actual':fecha_actual,
     }
     return render(request,template,context)
