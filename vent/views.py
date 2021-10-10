@@ -130,8 +130,7 @@ def deuda_delete(request,idDoc):
 def webhook_endpoint(request):
     jsondata = request.body
     data = json.loads(jsondata)
-    for answer in data['form_response']['answers']: # go through all the answers
-      type = answer['type']
-      print(f'answer: {answer[type]}') # print value of answers
+    print(data)
+    print(data["debt"])
 
     return HttpResponse(status=200)
