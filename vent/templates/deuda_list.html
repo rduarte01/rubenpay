@@ -45,7 +45,9 @@
       <thead>
           <th data-field="id" data-sortable="true" >docId</th>
           <th data-field="nombres" data-sortable="true" >label</th>
-          <th data-field="apellidos" data-sortable="true" >payUrl</th>
+          <th data-field="nombres" data-sortable="true" >status</th>
+          <th data-field="apellidos" data-sortable="true" >Date start</th>
+          <th data-field="apellidos" data-sortable="true" >Date end</th>
 
           <th>Acciones</th>
       </thead>
@@ -54,7 +56,14 @@
         <tr>
           <th>{{ item.docId }}</th>
           <th>{{ item.label }}</th>
-          <th>{{ item.payUrl }}</th>
+          <th>{{ item.payStatus.status }}</th>
+          <th>{{ item.validPeriod.start }}</th>
+          <th>{{ item.validPeriod.end }}</th>
+          
+
+          <th>
+            <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'vent:deuda_edit' item.docId %}')"><i class="far fa-edit"></i></button>
+          </th>
 
         </tr>
         {% endfor %}

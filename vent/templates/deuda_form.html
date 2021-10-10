@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         {% if obj %}
-            <form role="form" action="{%  url 'vent:deuda_edit' obj.pk %}" method="post"  class="form-inline">
+            <form role="form" action="{%  url 'vent:deuda_edit' obj %}" method="post"  class="form-inline">
         {% else %}
             <form role="form" action="{% url 'vent:deuda_new' %}" method="post"  class="form-inline">
         {% endif %}
@@ -23,10 +23,56 @@
 
                             <div class="col-lg-3">Ingrese CI</div>
                             <div class="col-lg-8">
-                                <input type="number" class="form-control text-right" value="" 
-                                name="docId" id="docId">
+                                <input type="number" class="form-control text-right" 
+                                
+                                {% if obj %} value={{docId}} readonly {% else %} value="" {% endif %} 
+                                name="docId" id="docId" required>
                             </div>
-                        </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-lg-3">Descripción</div>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control text-right" 
+                                {% if obj %} value={{label}} {% else %} value="" {% endif %}  
+                                name="label" id="label" required>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-lg-3">Monto en GS</div>
+                            <div class="col-lg-8">
+                                <input type="number" class="form-control text-right" 
+                                {% if obj %} value={{value}} {% else %} value="" {% endif %}  
+                                name="value" id="value" required>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-lg-3">Fecha de inicio</div>
+                            <div class="col-lg-8">
+                                <input type="date" class="form-control text-right" value={{fecha_actual}} 
+                                name="start" id="start" required>
+                                <input type="time" class="form-control text-right" value="00:00"  
+                                name="start-time" id="start-time">
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-lg-3">Fecha de fin</div>
+                            <div class="col-lg-8">
+                                <input type="date" class="form-control text-right" value={{fecha_actual}}
+                                name="end" id="end" required>
+                                <input type="time" class="form-control text-right" value="00:00" 
+                                name="end-time" id="end-time">
+                            </div>
+                        </div>  
+                        {% if obj %} 
+                            <div class="row">
+                                <div class="col-lg-3">Fecha de fin</div>
+                                <div class="col-lg-3">
+                                    <img src={{payUrl}} alt="payUrl">
+                                </div>
+                            </div>  
+                        
+                        {% endif %}  
+                        
                         <div class="dropdown-divider"></div>
                         <div class="row">
                             <div class="col">
@@ -47,4 +93,3 @@
         </form>
     </div>
 </div>
-
