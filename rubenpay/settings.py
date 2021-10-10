@@ -35,6 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vent',
+    'bootstrap4', # Registramos Bootstrap 4 (Este comentario es para explicación, debes de eliminarlo para probar la aplicación, si no te va a dar error)
+    'widget_tweaks', #Registramos widget_tweaks (Este comentario es para explicación, debes de eliminarlo para probar la aplicación, si no te va a dar error)
+    'bases',
+    'django_userforeignkey',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -45,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_userforeignkey.middleware.UserForeignKeyMiddleware',
 ]
 
 ROOT_URLCONF = 'rubenpay.urls'
@@ -52,7 +58,7 @@ ROOT_URLCONF = 'rubenpay.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,4 +120,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, 'static'),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
