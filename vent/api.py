@@ -91,3 +91,28 @@ def api_deuda_new(idDeuda,f1,f2,valor,desc):
         print("# Error")
         if "meta" in response:
             pp.pprint(response["meta"])
+
+def api_deuda_delete(idDeuda):
+    apiKey = APIKEY
+    
+    notificarAlWebhook = "true"
+    host = "staging.adamspay.com"
+    path = "/api/v1/debts/" + idDeuda
+    headers = {"apikey": apiKey, "x-should-notify": notificarAlWebhook}
+    
+    conn = http.client.HTTPSConnection(host)
+    conn.request("DELETE", path , "", headers)
+    data = conn.getresponse().read().decode("utf-8")
+    
+    response = json.JSONDecoder().decode(data)
+    
+    pp = pprint.PrettyPrinter(indent=2)
+    if "debt" in response:
+        debt=response["debt"]
+        print("Deuda borrada")
+        print("Detalles:")
+        pp.pprint(response["debt"])
+    else:
+        print("# Error")
+        if "meta" in response:
+            pp.pprint(response["meta"])

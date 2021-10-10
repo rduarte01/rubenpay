@@ -18,6 +18,10 @@ from django import forms
 from django.contrib.auth.decorators import login_required,permission_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib import messages
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from vent.api import *
 
 @login_required(login_url='/login/')
@@ -105,3 +109,29 @@ def deuda_edit(request,idDoc):
         'fecha_actual':fecha_actual,
     }
     return render(request,template,context)
+
+@login_required(login_url='/login/')
+def deuda_delete(request,idDoc):
+    api_deuda_delete(idDoc)
+    list = api_deuda_list()
+
+    template_name = 'deuda_list.html'
+    messages.success(request, 'Eliminado correctamente')
+
+    context={
+        'obj':list,
+    }
+    return render(request,template_name,context)
+
+
+
+@csrf_exempt
+@require_POST
+def webhook_endpoint(request):
+    jsondata = request.body
+    data = json.loads(jsondata)
+    for answer in data['form_response']['answers']: # go through all the answers
+      type = answer['type']
+      print(f'answer: {answer[type]}') # print value of answers
+
+    return HttpResponse(status=200)
