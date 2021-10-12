@@ -106,20 +106,22 @@
 </div>
 
 <script>
-    var obj = document.getElementById("docId").value;
+    //var obj = document.getElementById("docId").value;
     //var obj = {{ docId | safe }};
-    console.log(obj)
+    //console.log(obj)
     //HOST = "http://127.0.0.1:8000";
     HOST = "http://138.197.203.157:33333";
     
-    var url = HOST +"/vent/pendings/?idCode="+obj;
-    console.log(url)
+    //var url = HOST +"/vent/pendings/?idCode="+obj;
+    //console.log(url)
     /// se debe consultar cada 5s a la funcion para saber si hay cambios
     /// tener una lista en donde se hace push cuando esta pendings y cuando esta paid se quita de la lista
     /// 
     
     const bol = true;
-    const consult_pendigs = (URL) => {
+    const consult_pendigs = () => {
+        var obj = document.getElementById("docId").value;
+        var url = HOST +"/vent/pendings/?idCode="+obj;
         fetch(URL)
         .then(res => res.json())
         .then(data => {
