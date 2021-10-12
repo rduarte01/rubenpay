@@ -140,7 +140,7 @@ def webhook_endpoint(request):
         print(data["debt"])
         print(data["debt"]["docId"])
         print(data["debt"]["payStatus"]["status"])
-        if data["debt"]["payStatus"]["status"] == "pending":
+        if data["debt"]["payStatus"]["status"] == "paid":
             LISTA_CAMBIOS[data["debt"]["docId"]] = data["debt"]["payStatus"]["status"]
         else:
             LISTA_CAMBIOS.pop(data["debt"]["docId"])
@@ -163,7 +163,8 @@ class Consult_pending(APIView):
             return Response({'message': 'Los datos recibidos no son correctos'},status = status.HTTP_400_BAD_REQUEST)
         try:
             LISTA_CAMBIOS[idCode]
-        except:
             return Response({"message":"not"})
+        except:
+            return Response({"message":"yes"})
 
         return Response({"message":"ok"})
