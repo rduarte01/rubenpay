@@ -19,6 +19,17 @@
                         </div>
                         <div class="dropdown-divider"></div>
                         {% csrf_token %}
+                            {% if obj %} 
+                                <div class="row">
+
+                                    <div class="col-lg-3">Estado</div>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control text-right" 
+                                        value={{status}} readonly
+                                        name="status" id="status" required>
+                                    </div>
+                                </div><br>    
+                            {% endif %} 
                         <div class="row">
 
                             <div class="col-lg-3">Ingrese CI</div>
@@ -93,3 +104,38 @@
         </form>
     </div>
 </div>
+
+<script>
+    var obj = document.getElementById("docId").value;
+    //var obj = {{ docId | safe }};
+    console.log(obj)
+    //HOST = "http://127.0.0.1:8000";
+    HOST = "http://138.197.203.157:33333";
+    
+    var url = HOST +"/vent/pendings/?idCode="+obj;
+    console.log(url)
+    /// se debe consultar cada 5s a la funcion para saber si hay cambios
+    /// tener una lista en donde se hace push cuando esta pendings y cuando esta paid se quita de la lista
+    /// 
+    
+    const bol = true;
+    const consult_pendigs = (URL) => {
+        fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+           console.log(data.message)
+           if (data.message == "not"){
+               console.log("cambiar estado");
+               document.getElementById("status").innerHTML = "paid";
+                bol = false;
+            }
+
+        });
+        if (bol == true){
+            setTimeout(consult_pendigs, 500)
+        }
+    }
+    consult_pendigs(url)
+
+    
+</script>

@@ -24,6 +24,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from vent.api import *
 
+###########################################
+LISTA_CAMBIOS = dict()
+###########################################
+
 @login_required(login_url='/login/')
 def deuda_list(request):
 
@@ -74,7 +78,7 @@ def deuda_edit(request,idDoc):
     fecha_actual = timezone.now().date()
     obj = dict()
     print("-------------------------------------------------")
-    docId,label,payUrl,value,start,end = api_deuda(idDoc)
+    docId,label,payUrl,value,start,end,status = api_deuda(idDoc)
     print("-------------------------------------------------")
 
     if request.method == "POST":
@@ -106,6 +110,7 @@ def deuda_edit(request,idDoc):
         'value':value,
         'start':start,
         'end':end,
+        'status':status,
         'fecha_actual':fecha_actual,
     }
     return render(request,template,context)
@@ -131,6 +136,34 @@ def webhook_endpoint(request):
     jsondata = request.body
     data = json.loads(jsondata)
     print(data)
-    print(data["debt"])
+    try:
+        print(data["debt"])
+        print(data["debt"]["docId"])
+        print(data["debt"]["payStatus"]["status"])
+        if data["debt"]["payStatus"]["status"] == "pending":
+            LISTA_CAMBIOS[data["debt"]["docId"]] = data["debt"]["payStatus"]["status"]
+        else:
+            LISTA_CAMBIOS.pop(data["debt"]["docId"])
+    except:
+        pass
 
     return HttpResponse(status=200)
+
+from rest_framework.views import APIView
+from rest_framework import status
+
+class Consult_pending(APIView):
+    @csrf_exempt
+    def get(self, request, format=None):
+        try:
+            idCode = request.GET.get('idCode')
+            print(idCode)
+        except:
+            print("Revento al intentar leer el json")
+            return Response({'message': 'Los datos recibidos no son correctos'},status = status.HTTP_400_BAD_REQUEST)
+        try:
+            LISTA_CAMBIOS[idCode]
+        except:
+            return Response({"message":"not"})
+
+        return Response({"message":"ok"})

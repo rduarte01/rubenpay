@@ -44,7 +44,8 @@ def api_deuda(idDoc):
     value = response.json()["debt"]["amount"]["value"]
     start = response.json()["debt"]["validPeriod"]["start"]
     end = response.json()["debt"]["validPeriod"]["end"]
-    return docId,label,payUrl,value,start,end
+    status = response.json()["debt"]["payStatus"]["status"]
+    return docId,label,payUrl,value,start,end,status
     
 
 def api_deuda_new(idDeuda,f1,f2,valor,desc):

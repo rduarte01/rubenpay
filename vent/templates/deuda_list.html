@@ -60,7 +60,6 @@
           <th>{{ item.validPeriod.start }}</th>
           <th>{{ item.validPeriod.end }}</th>
           
-
           <th>
             <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'vent:deuda_edit' item.docId %}')"><i class="far fa-edit"></i></button>
             <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{% url 'vent:deuda_delete' item.docId %}')"><i class="fas fa-trash-alt"></i></button>
@@ -88,6 +87,8 @@
             pageList:[10, 25, 50, 100, 'All'],
             showPaginationSwitch: true
         });
+        
+
 
 </script>
 
